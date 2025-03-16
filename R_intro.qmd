@@ -1,0 +1,31 @@
+---
+title: "Introduction to R"
+format: 
+  html:
+    toc: true
+editor: visual
+---
+
+# Introduction
+
+## Why R?
+
+R is a programming language for statistical computing and graphics. It can usually be used for the entire process of a statistical analysis: reading in data, cleaning data, analyzing data, and visualization.
+
+-   R is free
+-   Can do virtually anything
+-   Lots of community support (packages, help online, etc.)
+-   Easy to replicate results
+
+## Reading in Data
+
+The function we use to read in data will depend on what format the data is in. This lab will use a .csv file as the example, and the relevant function to read in a .csv file is the `read.csv()` function.
+
+Let's load in the data. We will store the output of the `read.csv()` function in an object. You can name the object whatever you wish, but make it informative.
+
+```{r read_data}
+nhanes <- read.csv("nhanes.csv", 
+                   stringsAsFactors = TRUE)
+```
+
+## 
