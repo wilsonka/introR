@@ -17,9 +17,225 @@ R is a programming language for statistical computing and graphics. It can usual
 -   Lots of community support (packages, help online, etc.)
 -   Easy to replicate results
 
+## General Workflow
+
+In RStudio, the two main panes we will be using are the "Source" pane and a "Console" pane. The Source pane is a text editor where you will have your R scripts, Quarto files, etc., while the Console pane is where the R commands from your R scripts are run.
+
+The general workflow is to write all of your R code in an R script or Quarto file, and from these run commands in the console. However, sometimes it's faster to type R commands directly in the console when e.g. debugging or doing quick data exploration/visualization.
+
+![](images/RStudio_fig.png)
+
+## Quarto
+
+Quarto is a tool that allows you to create documents that integrate R code, text, and output into one cohesive document! It allows for greater reproducibility and improved readability, and (once you're familiar with it) it can save you tons of time in formatting and producing documents.
+
+[Here is an introduction to using Quarto](https://quarto.org/docs/get-started/hello/rstudio.html), and [here is a quick guide on common usage](https://quarto.org/docs/get-started/authoring/rstudio.html).
+
+# R Fundamentals
+
+## R Does Math!
+
+We can use R as a calculator for performing math!
+
+```{r math}
+2 + 2
+3^4 * (3 - 3) + 1/2
+```
+
+## Objects in R
+
+In R, you can store output in objects using the `<-` command. The left hand side will be the name of the object you are creating, and the right hand side will be what you're storing into the object.
+
+Let's create an object named `x` and store the number `4` in it, and create an object named `y` and store in it the result of a more complicated math expression.
+
+```{r objects}
+x <- 4
+y <- 3^4 * (3 - 3) + 1/2
+```
+
+The objects `x` and `y` are now stored in your global environment. You can look in the "Environment" tab in the "Environment/History/Connections" RStudio pane to see what objects are in your current environment. Alternatively, you can list them by running the `ls()` command
+
+Remember that objects in R are CASE-SENSITIVE. So, `x` and `X` refer to different objects! This can sometimes lead to errors if you accidentally capitalize (or forget to capitalize) the name of an object.
+
+```{r list_env}
+ls()
+```
+
+You can also type `x` and `y` in the console and hit enter or return in order to see what's stored in these objects.
+
+```{r display_xy}
+x
+y
+```
+
+We can perform operations on objects as well.
+
+```{r object_operation}
+x + y
+```
+
+## Data Types
+
+You can create many different types of objects in R. The `x` and `y` objects above are "numeric" objects:
+
+```{r class_x}
+class(x)
+```
+
+Some additional object types are "character":
+
+```{r character}
+character_object_A <- "A"
+character_object_A
+character_object_cat <- "cat"
+character_object_cat
+class(character_object_cat)
+```
+
+and "logical":
+
+```{r logical}
+logical_object_T <- TRUE
+logical_object_T
+logical_object_F <- FALSE
+logical_object_F
+class(logical_object_F)
+```
+
+We can also create vectors in R, which can be numeric, character, or logical.
+
+```{r vector}
+num_vector <- c(1, 2, 3)
+num_vector
+class(num_vector)
+char_vector <- c("A", "B", "C")
+char_vector
+class(char_vector)
+logi_vector <- c(TRUE, FALSE, TRUE, FALSE)
+logi_vector
+class(logi_vector)
+```
+
+## Logical Comparisons
+
+A logical comparison is a statement that compares two values and returns either TRUE or FALSE. If we want to make logical comparisons, we can use the following:
+
+-   `>`: strictly greater than
+-   `<`: strictly less than
+-   `==`: equal to (note that this is TWO equals signs)
+-   `!=`: NOT equal to
+-   `>=`: greater than or equal to
+-   `<=`: less than or equal to
+-   `%in%`: is an element of
+
+Here are some examples of usage.
+
+```{r logical_comparisons}
+2 > 3
+2 < 3
+2 == 3
+3 == 3
+2 != 3
+2 <= 3
+3 >= 3
+```
+
+We can also perform logical comparisons on vectors, in which case the comparison will be done for each element of the vector.
+
+```{r logical_comparisons_vector}
+x <- c(1, 4, 5)
+y <- c("cat", "dog", "goat")
+
+x < 4
+y == "goat"
+```
+
+The `%in%` comparison is a bit different than the others. For example, the statement `3 %in% x` will check to see if any element of `x` is equal to `3`.
+
+```{r logical_comparisons_in}
+x <- c(1, 2, 3)
+3 %in% x
+```
+
+## Functions in R
+
+In R, you will use functions to do most of your work. A function takes input in the form of "arguments" and produces a function-dependent output which you can then store in an R object. Above, `c()` is an example of a function.
+
+Each function in R has specific input arguments. Some you must specify yourself, some have default values (values that the argument will take if nothing else is specified) and thus are optional and you only have to specify them if you want something different from the default.
+
+Another example of a function is the `mean()` function which takes a vector as an input argument and returns the mean of that vector as the output.
+
+```{r mean}
+num_vec <- c(1, 4.4, 5, 7)
+mean_num_vec <- mean(num_vec)
+mean_num_vec
+```
+
+Arguments have names, but functions also have a default ordering of input arguments so if you do not specify a name of an argument then it will go in order. For the `mean()` function, the main argument (the vector of which you want to take the mean) is named `x`. It is also the first argument so if you don't specify it by name, then R will assume the first argument is `x`.
+
+```{r mean_2}
+mean_num_vec <- mean(x = num_vec)
+mean_num_vec
+```
+
+Another note that functions in R are also CASE-SENSITIVE. So `mean()` and `Mean()` are different functions! Type `?mean` to open the documentation for the function under the "Help" tab in the "Files/Plots/Packages/Help/Viewer/Presentation" RStudio pane.
+
+## Writing Comments in Your Code
+
+Anything written in your R code that is preceded by a `#` will not be run by R.
+
+```{r comment_example}
+# this won't be run!!!
+```
+
+You can use this functionality to write comments in your code to improve readability (for others, yourself, and especially your future self). It is very important that you and others who might read your code know what's going on.
+
+Here are some recommendations for commenting your code:
+
+-   Use comments to mark off sections of code.
+-   Comment your code with care. Comments should explain the why, not the what.
+-   Start each R script with a comment saying who wrote it and when, and what it contains. If your script works in conjunction with multiple other scripts in a larger program, you should also include how this particular file fits into the larger program.
+
+# R Packages
+
+## What Are R packages?
+
+R packages are collections of functions and data sets developed by the community. They increase the power of R by improving existing base R functionalities, or by adding new ones. R comes with a set of packages, but you can download new ones as well. Usually, you will download packages from [CRAN](https://cran.r-project.org/), an online repository with over 10,000 R packages, but you can also download them from other locations such as Github.
+
+For our session, the R packages we need are pre-installed for us. If you download and install R outside of our JupyterHub account, you will need to first install them, by following the instructions in the next section.
+
+## Installing Packages From CRAN
+
+For publicly available packages on CRAN, you just need the name of the package and use the command `install.packages()`. One package we will be using is the `tidyverse` package, which is actually a package that represents a set of packages. Installing the `tidyverse` package will install a collection of many packages such as `dplyr` and `ggplot2`.
+
+If have not already, let's install the `tidyverse`.
+
+```{r install_tidyverse}
+#| message: FALSE
+#| warning: FALSE
+# Unccomment the code below to install.
+# install.packages("tidyverse")
+```
+
+You only ever need to install a package once (until you upgrade to a new version of R).
+
+## Loading Libraries
+
+Once you install a package, you'll need to load it in. Typically, you'll want to do this first at the top of your R script or Quarto document:
+
+```{r library_tidyverse}
+#| message: FALSE
+#| warning: FALSE
+library(tidyverse)
+```
+
+# Working with Data Part 1
+
+Our goal is to use R for data analysis. As an example, we will be using some data from the US National Health and Nutrition Examination Surveys (NHANES). NHANES uses a **complex survey design** to **oversample** certain subgroups. The version we will use can be viewed as a **simple random sample** from the US population. We will use this data to show how to use R to read in data, perform common data manipulation/wrangling tasks, run a basic descriptive analysis, and answer inferential questions (including constructing confidence intervals, running hypothesis tests, and fitting linear regression models).
+
 ## Reading in Data
 
-The function we use to read in data will depend on what format the data is in. This lab will use a .csv file as the example, and the relevant function to read in a .csv file is the `read.csv()` function.
+The function we use to read in data will depend on what format the data is in. For this session we will use a .csv file as the example, and the relevant function to read in a .csv file is the `read.csv()` function.
 
 Let's load in the data. We will store the output of the `read.csv()` function in an object. You can name the object whatever you wish, but make it informative.
 
@@ -28,4 +244,418 @@ nhanes <- read.csv("nhanes.csv",
                    stringsAsFactors = TRUE)
 ```
 
-## 
+## Data Frames
+
+The `read.csv()` function reads in the data and stores it as a `data.frame` object. A `data.frame` object is structured like a matrix with rows and columns, where the rows correspond to observations and the columns correspond to variables.
+
+A good first step of any data analysis, is to verify the data you have matches what you expect. Below is a set of commands that are usually good to run in the beginning to get accustomed to a dataset.
+
+We can read the names of the variables with the `names()` function.
+
+```{r names}
+names(nhanes)
+```
+
+We can use `dim()` to see the dimensions of the data---the numbers of rows and columns.
+
+```{r dimensions}
+dim(nhanes)
+```
+
+To see the first 6 rows, we can use the `head()` function
+
+```{r head}
+head(nhanes)
+```
+
+We see that each row corresponds to an individual in our dataset, with the columns being the different measurements taken on each person. There are 500 rows. A benefit of using the `head()` function is that we can see what types of values are in each column. For example, the `age` column appears to take on numerical values and `education` appears to take on values `High school/some college` and `College graduate` from what we can see so far.
+
+We can see the structure of the data frame with the `str()` function.
+
+```{r str}
+str(nhanes)
+```
+
+We can see summaries of each variable with the `summary()` function.
+
+```{r summary}
+summary(nhanes)
+```
+
+## Piping in R
+
+We will be interacting with data sets by applying functions to them---subsetting, summarizing, etc. To apply a sequence of functions to a data frame, we will mainly be 'piping' functions together with the `%>%` operator from the `dplyr` package which is loaded when you load the `tidyverse` package. This is a way to take the output from a function and use it as the input of the next function in order to chain functions together in a readable and user-friendly manner.
+
+To start, here's a way to summarize the data frame by piping.
+
+```{r piping_summary}
+nhanes %>% summary()
+```
+
+The above code uses the `nhanes` object as the input to the summary function. You can think of it as "start with the `nhanes` object, then apply the `summary()` function to it."
+
+For the next example, we will "pipe" the `nhanes` data into the `pull()` function, to extract the `age` column:
+
+```{r piping_age}
+age_piped <- nhanes %>% pull(age)
+```
+
+In the command `nhanes %>% pull(age)`, you can think of this as "start with the `nhanes` data, then apply the `pull()` function to it with the additional argument `age` (which is the variable to pull from the data)."
+
+![](images/pull.png)
+
+Let's take a look at what we have:
+
+```{r all_equal}
+age_piped
+```
+
+As a final example, let's take the summary of the `age` variable by piping!
+
+```{r piping_summary_age}
+nhanes %>% pull(age) %>% summary()
+```
+
+You can see how the applied functions are chained together. We can read this as "start with the `nhanes` data, *pull* the `age` variable out, then *summarize* it." More technically, we can read it as "start with the `nhanes` data, apply the `pull()` function with the additional argument `age`, then take this output and apply the `summary()` function to it."
+
+Note: the code provided in this session will usually follow tidyverse-- this is the way that data manipulation in R is often taught nowadays.
+
+## More summaries
+
+We can also use the `summarize()` function to calculate summary statistics:
+
+```{r summarize_age}
+nhanes %>% summarize(mean_age = mean(age), sd_age = sd(age))
+```
+
+Notice that this created a new data frame with two columns: `mean_age` and `sd_age`. We could choose to save this as a new variable to refer back to later!
+
+Q: how would you do this?
+
+## Calculating Proportions
+
+For categorical variables, we often want to create a table of the numbers in each category. We can use the `table()` function for this. Let's tabulate the numbers of persons who have hypertension in the nhanes data.
+
+```{r table_piped}
+nhanes %>% pull(hypertension) %>% table()
+```
+
+How would you read the above code? E.g. "start with the `nhanes` data, ..."
+
+If we want to calculate the percentages of each hypertension status, then we can use the `prop.table()` function. The input to `prop.table()` is a table (i.e. the output from the `table()` function), so we can add this to the end of our chain of piped functions, or add it as the outermost function if we aren't piping.
+
+```{r proportions}
+nhanes %>% pull(hypertension) %>% table() %>% prop.table()
+```
+
+## Pull and Select
+
+We have already seen `pull()` in action, which requires ONE column name and outputs a vector. On the other hand with `select()` you can specify multiple columns and it will output a data frame with only those columns.
+
+![](images/select.png)
+
+We will compare these when we use just focus on one column and use `head()` to only show the first few entries/rows:
+
+```{r pull_v_select}
+nhanes %>% pull(age) %>% head()
+nhanes %>% select(age) %>% head()
+```
+
+As mentioned, we can also use `select()` with multiple columns:
+
+```{r select}
+nhanes %>% select(age, bp_sys_mmhg, hypertension) %>% head()
+```
+
+## Subsetting Data
+
+We can use the `filter()` function to subset data. This function takes as input a data frame and a logical comparison for one (or more) of the variables in the data frame. This function will make a logical comparison to check if a statement regarding the values of a variable in your data set is TRUE, and then only returning the subset of the data for which this statement is TRUE.
+
+![](images/filter.png)
+
+Let's say we want to create a new data frame with only those with hypertension in our data.
+
+```{r filter}
+nhanes_hyp <- nhanes %>% filter(hypertension == "Yes")
+head(nhanes_hyp)
+nhanes_hyp %>% pull(hypertension) %>% table()
+```
+
+For the logical comparison in the `filter()` function, you must be very careful to make sure that the value you're comparing to is correct. Capitalization matters! The command `filter(hypertension == "yes")` will not give any results.
+
+We can combine subsetting with other operations as well. Let's summarize the age of only those who have hypertension.
+
+```{r filter_summary}
+nhanes %>% filter(hypertension == "Yes") %>% pull(age) %>% summary()
+```
+
+Lastly, let's make a table of the proportion of health insurance types (`health_insurance`) among those who do not have hypertension.
+
+```{r filter_prop_hyp_hi}
+nhanes %>% filter(hypertension == "No") %>% pull(health_insurance) %>% table() %>% prop.table()
+```
+
+### Logical Operators
+
+Sometimes it will be useful to have more sophisticated conditions to check and so we can use logical operators. There are three of them:
+
+-   the AND operator (&)
+-   the OR operator (\|)
+-   the NOT operator (!)
+
+**Example 1**: suppose we want to subset the data to include those who are college graduates (`education == "College graduate"`) AND have private health insurance (`health_insurance == "Private"`):
+
+```{r logical_operator_AND}
+nhanes %>% filter(education == "College graduate" & health_insurance == "Private") %>% head()
+```
+
+**Example 2**: suppose we want to summarize the ages of everyone with SBP under 120 OR DBP under 80:
+
+```{r logical_operator_OR}
+nhanes %>% filter(bp_sys_mmhg < 120 | bp_dia_mmhg < 80) %>% pull(age) %>% summary()
+```
+
+**Example 3**: suppose we want the systolic blood pressure of everyone without hypertension, are NOT in the more than 75,000 household income category, AND are at least 40 years old:
+
+```{r logical_operator_NOT}
+nhanes %>% filter(hypertension == "No" & income_hh != "$75,000 and above" & age >= 40) %>% pull(bp_sys_mmhg) %>% head()
+```
+
+# Data Visualization
+
+## Bar plots
+
+Bar plots are a common way to visualize categorical data.
+
+```{r}
+# Barplot of hypertension status
+nhanes %>%
+  count(hypertension) %>%
+  ggplot(aes(x = factor(hypertension), y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Hypertension Status",
+       x = "Hypertension",
+       y = "Count") +
+  theme_minimal()
+```
+
+## Boxplots
+
+Boxplots are a good way to visualize continuous data.
+
+```{r}
+# Boxplot of age
+nhanes %>%
+  ggplot(aes(x = "", y = age)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Age",
+       x = "",
+       y = "Age (years)") +
+  theme_minimal()
+```
+
+Especially when you have a categorical variable, you can use boxplots to compare the distribution of the continuous variable across the different categories.
+
+```{r}
+# Boxplot of cholesterol by hypertension status
+nhanes %>%
+  ggplot(aes(x = hypertension, y = chol_total_mgdl)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of cholesterol by hypertension status",
+       x = "Hypertension status",
+       y = "Cholesterol (mg/dl)") +
+  theme_minimal()
+```
+
+## Histogram
+
+A histogram can be used to visualize the distribution of a continuous variable.
+
+```{r}
+# Histogram of age
+nhanes %>%
+  ggplot(aes(x = age)) +
+  geom_histogram(binwidth = 5) +
+  labs(title = "Histogram of Age",
+       x = "Age (years)",
+       y = "Count") +
+  theme_minimal()
+```
+
+## Scatterplots
+
+Scatterplots are used to visualize the relationship between two continuous variables.
+
+```{r}
+# Scatterplot of age vs. systolic blood pressure
+nhanes %>%
+  ggplot(aes(x = age, y = bp_sys_mmhg)) +
+  geom_point() +
+  labs(title = "Scatterplot of Age vs. Systolic Blood Pressure",
+       x = "Age (yrs)",
+       y = "Systolic blood pressure (mm Hg)") +
+  theme_minimal()
+```
+
+# Working with Data Part 2
+
+Often, we are interested in *relationships* between variables. For example, are older ages associated with higher systolic blood pressure? Are people who were assigned female at birth more likely to have hypertension? We've already looked at some ways to do this visually (continuous vs categorical variable $\to$ boxplot, continuous vs continuous variable $\to$ scatterplot), but we can also do this numerically.
+
+## Summarizing for a particular group
+
+We can use the `filter()` function to select a subset of the data, and then use the `summarize()` function to calculate summary statistics for that subset:
+
+```{r}
+# Summarize age for those with hypertension
+nhanes %>%
+  filter(hypertension == "Yes") %>%
+  summarize(mean_age_hypertension = mean(age, na.rm = TRUE),
+            sd_age_hypertension = sd(age, na.rm = TRUE),
+            min_age_hypertension = min(age, na.rm = TRUE),
+            max_age_hypertension = max(age, na.rm = TRUE))
+```
+
+IMPORTANT: Make sure the `filter()`ing is set up correctly -- specifically the name of the column needs to match EXACTLY and the value we are looking for matches the entries we are looking for EXACTLY. Here, `hypertension` can only take on values `"Yes"` or `"No"`!
+
+**Group exercise:** obtain summaries of age for those who are college graduates.
+
+### Summarizing by group
+
+We can use the `group_by()` function to group the data by a variable, and then use the `summarize()` function to calculate summary statistics within each group:
+
+```{r}
+# Summarize age by hypertension status
+nhanes %>%
+  group_by(hypertension) %>%
+  summarize(mean_age = mean(age, na.rm = TRUE),
+            sd_age = sd(age, na.rm = TRUE),
+            min_age = min(age, na.rm = TRUE),
+            max_age = max(age, na.rm = TRUE))
+```
+
+## Creating new variables
+
+We can use the `mutate()` function to create new variables based on existing variables. We'll demonstrate this by creating a new variable (in this case `high_cholesterol`) which takes on the values 1 if the individual has a cholesterol value of at least 240, and 0 otherwise:
+
+```{r}
+# Create high cholesterol variable for those with cholesterol of at least 240
+nhanes <- nhanes %>%
+  mutate(high_cholesterol = ifelse(chol_total_mgdl >= 240, 1, 0))
+```
+
+# Hypothesis Testing
+
+## One sample procedures for continuous outcome
+
+Suppose we are interested in making inference on the mean cholesterol among people with hypertension. Note that cholesterol is considered a **continuous** outcome.
+
+Let's illustrate how to use R to:
+
+1.  Calculate a point estimate (this is the sample mean)
+2.  Compute a confidence interval
+3.  Perform a one sample t-test (suppose we would like to test the null hypothesis that the mean cholesterol among people with hypertension is equal to 191 mg/dL:)
+
+This can all be accomplished using `t.test()`:
+
+```{r}
+chol_hyp <- nhanes %>% 
+  filter(hypertension == "Yes") %>%
+		pull(chol_total_mgdl)
+t.test(chol_hyp, mu = 191)
+```
+
+## One sample procedures for binary outcome
+
+Suppose we are interested in making inference on the proportion of people with private health insurance among people with hypertension and test whether that differs from 0.5. Note that having private health insurance is a **binary** outcome (can either have private insurance or not).
+
+```{r}
+private_ins_hyp <- nhanes %>% 
+  # restrict to those with hypertension
+  filter(hypertension == "Yes") %>% 
+  # create new var which is T/F of health insurance
+  mutate(isprivate = health_insurance == "Private") %>% 
+  # pull the new column
+  pull(isprivate)
+# number with private health insurance
+x = sum(private_ins_hyp)
+# sample size
+n = sum(!is.na(private_ins_hyp))
+```
+
+We'll see how to do this using the exact approach first:
+
+```{r}
+binom.test(x = x, n = n, p = 0.5)
+```
+
+Now, we will show how to do this using the normal approximation. The approximation should not be used if $np$ or $n(1-p)$ is small.
+
+```{r}
+prop.test(x = x, n = n, p = 0.5)
+```
+
+## Two sample procedures for continous outcome
+
+Suppose we are interested in making inference on the difference in mean cholesterol comparing individuals with and without hypertension. Note that cholesterol is a **continuous** outcome.
+
+```{r}
+chol_nohyp <- nhanes %>% 
+  filter(hypertension == "No") %>%
+		pull(chol_total_mgdl)
+t.test(chol_hyp, chol_nohyp)
+```
+
+## Chi-square tests
+
+Suppose we are interested in making inference on the association between hypertension status and health insurance status. Note that both hypertension status and health insurance status are **categorical** outcomes.
+
+```{r}
+my.table <- nhanes %>%
+  select(hypertension, health_insurance) %>%
+  table(deparse.level=2)
+my.table
+chisq.test(my.table)
+```
+
+Note: in the setting of 2x2 tables, you may be interested in various measures of association such as the risk difference, relative risk, and odds ratio. These can be calculated using the `epi.2by2()` function from the `epiR` package.
+
+# Linear Regression
+
+## Fitting the Model
+
+Suppose we would like to fit a linear model to the data: $$\text{mean SBP} = \beta_0 + \beta_1 \times \text{age}$$
+
+We can use the `lm()` function:
+
+```{r lm}
+model <- lm(bp_sys_mmhg ~ age, data = nhanes)
+model
+summary(model)
+confint(model)
+```
+
+Our fitted model:
+
+```{=tex}
+\begin{align*}
+\text{mean SBP} & = \beta_0 + \beta_1 \times \text{age}\\
+& = 103.7 + 0.40 \times \text{age}
+\end{align*}
+```
+
+## Scatterplots
+
+We can add the fitted linear regression model to a scatterplot:
+
+```{r scatter}
+nhanes %>%
+  ggplot(aes(x = age, y = bp_sys_mmhg)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Scatterplot of Age vs. Systolic Blood Pressure",
+       x = "Age (yrs)",
+       y = "Systolic blood pressure (mm Hg)") +
+  theme_minimal()
+```
+
+**Group exercise:** examine the relationship between age and diastolic blood pressure using linear regression and a scatterplot.
